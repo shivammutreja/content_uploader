@@ -1,0 +1,211 @@
+
+{% extends "new_ck.html" %}
+
+{% block choices %}
+
+
+<div class="container-fluid">
+
+<br/>
+<p class="bg-danger">&nbsp;You can add the choices for the question here. Just click on Add Choice.</p> 
+<br/>
+    <form id='form-test' onsubmit='testMe(this); return false;'>
+        <!-- <textarea cols="10" id="editor1" name="editor1" rows="10" >
+            &nbsp;Write the Question here!
+        </textarea> -->
+        <br/>
+        <button type="button" class="btn btn-sm btn-primary" id="add_choice">Add text choice</button>
+        <button type="button" class="btn btn-sm btn-primary" id="add_img_choice">Add text and image choice</button>
+        <button type="button" class="btn btn-sm btn-primary" id="add_vid_choice">Add video choice</button>
+        <div class="container" id="dynamic_choice">
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <br/>
+                <button class='btn btn-sm btn-primary' id='upload_file' type='submit'>Upload</button>
+            </div>
+            <div class="col-sm-push-1 col-sm-1">
+                <br/>
+                <!-- <button type="button" id="preview" style="display: none" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Launch demo modal
+                </button> -->
+            </div>
+        </div>
+    </form>
+
+
+</div>
+
+<!-- TODO: Improve preview page -->
+<!-- Modal -->
+<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    $("#preview").click(function(){
+        $("#myModal").modal('show');
+    });
+</script> -->
+
+
+<!-- <script>
+
+    var counter = 1;
+    $('#add_img_choice').click(function(){
+        var choice = "<br/><div class='row' id='div "+counter+" '><div class='col-sm-4 get_files'><input type='file' name='get_image' id='imgInp"+ counter+"' onchange='readURL(this);' multiple/><img id='blah"+counter+"' style='display:none' alt='your image' /></div><div class='col-sm-2'><input placeholder='Choice "+counter+"' name='choice' id='choice"+counter+"' style='display:none' /></div><div class='col-sm-1'><a class='btn clip' data-clipboard-target='#choice"+counter+"' style='display:none'><img src='https://clipboardjs.com/assets/images/clippy.svg' title='Copy to clipboard' style='width:14px' alt='Copy to clipboard'></a></div></div>"
+        $('#dynamic_choice').append(choice)
+        counter++;
+        return true;
+
+    });
+
+
+    $('#add_choice').click(function(){
+        var choice = "<br/><div class='row' id='div "+counter+" '><div class='col-sm-4'><input placeholder='Choice "+counter+"' name='choice' id='choice"+counter+"'></div></div>"
+        $('#dynamic_choice').append(choice)
+        counter++;
+        return true;
+
+    });
+
+</script> -->
+
+
+<!-- <script>
+    // $(document).ready(function(){
+        var choices_var = new Array();
+        function readURL(input) {
+            choices_var.push(input.id);
+            // console.log(this.choices_var);
+            console.log(input.id.slice(-1));
+            choice_id = input.id.slice(-1);
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                console.log(reader);
+            
+                reader.onload = function (e) {
+                    $('#blah'+choice_id).attr('src', e.target.result);
+                    console.log('#'+input.id);
+                    $('#'+input.id).after('<br>');
+                    // $('.get_data').data(e.target.result);
+                    $('#blah'+choice_id).css({'height': '100px', 'width': '100px','display': 'inline'});
+                }
+
+            
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    
+</script> -->
+
+
+<!-- <script>
+    // $(document).ready(function(){
+    //     $("#form-test").submit(function(evt){
+    //         evt.preventDefault();
+    function testMe(form_data){
+        // console.log($("#form-test").serializeArray());
+        // console.log($('#'+form_data.id+'input' )['choice'])
+        var formData = new FormData(form_data);
+        $.ajax({
+           url: '/file',
+           type: 'POST',
+           data: formData,
+           async: false,
+           cache: false,
+           contentType: false,
+           enctype: 'multipart/form-data',
+           processData: false,
+           success: function (data) {
+            if (data.images) {
+                for (var i = data.images.length - 1; i >= 0; i--) {
+                    new Clipboard('.clip');
+                    console.log(i, data.images[i], "#choice"+(i+1));
+                    console.log(choices_var[i].slice(-1));
+
+                    $(".get_files").find("br").remove(); //removing an extra break tag after image is uploaded.
+                    $("#"+choices_var[i]).remove(); //removing input tag to choose file after image is uploaded.
+                    $("#upload_file").prop('disabled', true); //removing upload button after image is uploaded.
+                    $("#upload_file").prop('title', 'You can upload as many options just once.'); //removing upload button after image is uploaded.
+
+
+                    var image_link = "Link: "+data.images[i]
+
+                    $("#choice"+choices_var[i].slice(-1)).val(image_link);
+                    // $("#choice"+choices_var[i].slice(-1)).html("Choice");
+                    
+
+
+                    $("#choice"+choices_var[i].slice(-1)).css({'display': 'inline'});
+                    $(".clip").css({'display': 'inline'});
+
+                    $('#blah'+choices_var[i].slice(-1)).attr('src', data.images[i]);
+
+                    $('#blah'+choices_var[i].slice(-1)).css({'height': '200px', 'width': '200px','display': 'inline'});
+
+                     // $("#imgInp"+(i+1)).prop('disabled', true);
+
+                     $("#preview").css({'display': 'inline'})
+                }
+            }
+            else{
+                for (var i = data.text_choices.length - 1; i >= 0; i--) {
+                    console.log(i, data.text_choices[i], "#choice"+(i+1));
+                }
+            }
+            window.open("/preview", "preview", "width=400, resizable=yes, height=400");
+
+        }
+        });
+    }
+// });
+
+</script>
+ -->
+
+<script type="text/javascript" src="{{static_url('js/image_preview.js')}}"></script>
+<script type="text/javascript" src="{{static_url('js/add_button.js')}}"></script>
+<script type="text/javascript" src="{{static_url('js/upload.js')}}"></script>
+
+<script>
+    function myFunction(button_id) {
+        console.log(button_id.name);
+    window.open("/find", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
+    }
+    // var choice_id = 
+</script>
+
+<script>
+
+    function ajaxSubmit() {
+        // console.log($("#imgInp"));
+        // var img_data = $("#blah").attr("src")
+        // var img_title = $("#imgInp").val();
+
+        // console.log($("form")[0]);
+        // alert(img_title);
+        var form_data = $('#form-test').serialize()
+        // new FormData($('#form-test')[0]);
+        console.log(form_data);
+    }
+    
+</script>
+
+{% end block %}

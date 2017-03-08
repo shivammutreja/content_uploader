@@ -1,0 +1,100 @@
+
+{% extends "new_ck.html" %}
+
+<!-- {% autoescape None %}
+ -->
+{% block choices %}
+
+<!-- Content Editor -->
+<!-- <link href="{{static_url('css/preview.css')}}" rel="stylesheet"> -->
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <br>   
+        <div class="col-sm-2">
+            <p>Question: {{question_id}}</p>
+        </div>
+
+        <div class="col-sm-6 well">
+            <p>{{question_content}}</p>
+        </div>      
+
+    </div>
+
+    {% if choices %}
+    <h4>Choices:</h4>
+
+    {% for index, choice in enumerate(choices) %}
+
+    <div class="row">
+        
+        {% if choice.get("choice"+str(index+1), '').endswith("png") or choice.get("choice"+str(index+1), '').endswith("jpeg") %}
+
+        <div class="col-sm-2">
+            <p>{{"Choice "+str(index+1)+":"}}</p>
+        </div>
+
+        <div class="col-sm-5">
+            <p><img src={{choice.get("choice"+str(index+1), '')}} height="150px" width="155px"></p>
+        </div>
+
+        <div class="col-sm-4 col-sm-pull-1">
+        <br>
+            <p>{{choice.get("choice"+str(index+1), '')}}</p> 
+        </div>
+
+        {% elif choice.get("choice"+str(index+1), '').endswith("mp4") %}
+
+        <div class="col-sm-6">
+            
+            <p>{{"Choice "+str(index+1)+":"}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <video width='350' controls preload='auto'>
+                    <source src='{{ choice.get("choice"+str(index+1), "") }}' type='video/mp4'>
+                </video>
+            </p>
+        </div>
+
+        <div class="col-sm-4 col-sm-pull-1">
+        <br>
+            <p>{{choice.get("choice"+str(index+1), '')}}</p> 
+        </div>
+
+        {% else %}
+
+        <div class="col-sm-4 col-sm-push-2">
+            <p>{{"Choice "+str(index+1)+":"}}&nbsp;&nbsp;&nbsp;{{choice.get("choice"+str(index+1), '')}}</p>
+        </div>
+
+        {% end if %}
+    
+    </div>
+
+    {% end for %}
+
+    {% else %}
+
+    <p><h4>Add choices for this question&nbsp;&nbsp;</h4><a href="/file">Add Choices</a></p>
+
+    {% end if %}
+
+    {% if solution %}
+    <br/>
+    <div class="row">
+        <div class="col-sm-2">
+            <p>Solution:</p>
+        </div>
+
+        <div class="col-sm-6 well">
+            <p>{{solution}}</p>
+        </div>
+    </div>
+    {% else %}
+    <p>This question has no solution.</p>
+    {% end if %}
+
+
+</div>
+
+{% end block %}

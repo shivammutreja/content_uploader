@@ -1,0 +1,73 @@
+
+{% extends "new_ck.html" %}
+
+{% block choices %}
+
+<!-- Content Editor -->
+
+<div class="container-fluid">
+
+<!-- Choices or Images  -->
+
+{% if not images %}
+<p id="image_path"></p>
+    <div class="row">
+        <form id="form-test" enctype="multipart/form-data" runat="server">
+
+            <div class="col-sm-4">
+                Enter Choice 1: <input type="text" placeholder="Choice 1" name="choice1" />
+            </div>
+
+            <div class="col-sm-8">
+                    <input type='file' name="get_image" id="imgInp" multiple/><br />
+                    <img id="blah" style="display:none" alt="your image" />
+                    <button class="btn btn-sm btn-primary">Upload</button>
+            </div>
+
+        </form>
+    </div>
+{% else %}
+
+{% for index,image in enumerate(images) %}
+<p id="image_path"></p>
+<div class="row">
+    <div class="col-sm-4">
+        Choice {{index + 1}}: <input name="choice{{index + 1}}" type="text" value="{{image}}" />
+    </div>
+    <div class="col-sm-4">    
+        <img src="{{image}}" height="100px" width="100px" alt="your image" />
+    </div>
+    <div class="col-sm-4">
+        <button name="choice{{index + 1}}" class="btn btn-sm btn-primary" onclick="myFunction(this);">Edit</button>
+    </div>
+</div>
+{% end for %}
+
+{% if choice_inputs %}
+    {% for input_index in range(2, choice_inputs+2) %}
+    <div class="row">
+        <form id="form-test" enctype="multipart/form-data" runat="server">
+
+            <div class="col-sm-4">
+                Enter Choice {{input_index}}: <input type="text" placeholder="Choice {{input_index}}" name="choice{{input_index}}" />
+            </div>
+
+            <div class="col-sm-8">
+                <input type='file' name="get_image" id="imgInp" multiple/><br />
+                <img id="blah" style="display:none" alt="your image" />
+                <button class="btn btn-sm btn-primary" id="click" >Upload</button>
+            </div>
+
+        </form>
+        
+    </div>
+    {% end for %}
+
+{% end if %}
+
+{% end if %}
+
+</div>
+
+
+{% end block %}

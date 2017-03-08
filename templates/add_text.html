@@ -1,0 +1,118 @@
+{% extends "new_ck.html" %}
+
+{% block choices %}
+
+<!-- Content Editor -->
+
+<div class="container">
+    <form id="question" method="post">
+        <textarea cols="10" id="editor1" name="editor1" rows="10" >
+            {% if text %}
+            &nbsp;Write the {{text}} here!
+            {% else %}
+            &nbsp;Write here!
+            {% end if %}
+        </textarea>
+        <br/>
+        <input type="submit" />
+    </form>
+
+    <!-- <br/>
+    <button type="button" class="btn btn-sm btn-primary" id="add_choice">Add text choice</button>
+    <button type="button" class="btn btn-sm btn-primary" id="add_img_choice">Add text and image choice</button>
+    <button type="button" class="btn btn-sm btn-primary" id="add_vid_choice">Add video choice</button>
+    <div class="container" id="dynamic_choice">
+    </div>
+
+    <br/>
+    <button type="button" class="btn btn-sm btn-primary" onclick="getAll(); return false;">Submit</button>
+ -->
+</div>
+
+
+<script>
+    CKEDITOR.replace( 'editor1', {
+          height: 300,
+          extraPlugins: 'mathjax',
+          mathJaxLib: 'http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
+          // filebrowserImageBrowseUrl: "/find",
+
+          // filebrowserImageUploadUrl: "/file"
+    } );
+
+    if ( CKEDITOR.env.ie && CKEDITOR.env.version == 8 ) {
+        document.getElementById( 'ie8-warning' ).className = 'tip alert';
+}
+</script>
+
+<!-- <script>
+
+  function submitForms(){
+    $("form").submit();
+    var test_data = document.getElementById("#form-image");
+  };
+
+  function getAll(){
+    // var formData = $("form").serialize();
+    $("form").submit();
+    var test_data = document.getElementById("#form-image");
+    var formData = new FormData(test_data);
+    console.log(formData);
+
+    $.ajax({
+       url: '/file',
+       type: 'POST',
+       data: formData,
+       async: true,
+       cache: false,
+       contentType: false,
+       enctype: 'multipart/form-data',
+       processData: false,
+       success: function (data) {
+        if (data.choices) {
+          for (var i = data.choices.length - 1; i >= 0; i--) {
+            new Clipboard('.clip');
+            console.log(i, data.choices[i], "#choice"+(i+1));
+            console.log(choices_var[i].slice(-1));
+
+            $(".get_files").find("br").remove(); //removing an extra break tag after image is uploaded.
+            $("#"+choices_var[i]).remove(); //removing input tag to choose file after image is uploaded.
+            $("#upload_file").prop('disabled', true); //removing upload button after image is uploaded.
+            $("#upload_file").prop('title', 'You can upload as many options just once.'); //removing upload button after image is uploaded.
+
+
+            var image_link = data.choices[i]
+
+            $("#choice"+choices_var[i].slice(-1)).val(image_link);
+            // $("#choice"+choices_var[i].slice(-1)).html("Choice");
+            
+
+
+            $("#choice"+choices_var[i].slice(-1)).css({'display': 'inline'});
+            $(".clip").css({'display': 'inline'});
+
+            $('#blah'+choices_var[i].slice(-1)).attr('src', data.choices[i]);
+
+            $('#blah'+choices_var[i].slice(-1)).css({'height': '200px', 'width': '200px','display': 'inline'});
+
+             // $("#imgInp"+(i+1)).prop('disabled', true);
+
+             $("#preview").css({'display': 'inline'})
+        }
+        }
+        else{
+          for (var i = data.text_choices.length - 1; i >= 0; i--) {
+            console.log(i, data.text_choices[i], "#choice"+(i+1));
+          }
+        }
+        // window.location.href = "/solution"
+        }
+  });
+  }
+
+</script>
+<script type="text/javascript" src="{{static_url('js/image_preview.js')}}"></script>
+<script type="text/javascript" src="{{static_url('js/add_button.js')}}"></script>
+<script type="text/javascript" src="{{static_url('js/upload.js')}}"></script> -->
+
+{% end block %}
